@@ -1,0 +1,24 @@
+@accessToken = ""
+
+### Add review to product
+POST http://localhost:3000/products/1/reviews
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "review": {
+    "reviewContent": "Cặk",
+    "reviewScore": 4
+  },
+  "userId": 1
+}
+
+### Get review by ID
+GET http://localhost:3000/reviews/1
+
+### Update review by ID
+PUT http://localhost:3000/reviews/1
+{
+  "reviewContent": "Lồz",
+  "reviewScore": 5,
+}

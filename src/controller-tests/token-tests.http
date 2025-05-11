@@ -1,0 +1,15 @@
+### Get new Access Token by Refresh Token
+POST http://localhost:3000/tokens/requestAccessToken
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoidm9uZ29jYmFvMTMwOTIwMDE1QGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoiVm8gTmdvYyBCYW8iLCJhdmF0YXIiOiIiLCJ0eXBlIjoicnQiLCJpYXQiOjE3NDUzMTAzMTgsImV4cCI6MTc3Njg2NzkxOH0.lG733nbrEfqjmRkbTQ0nSHf9JIFEXTJmhpi9sq4tMmo"
+}
+
+### Verify session by Refresh Token
+POST http://localhost:3000/tokens/verifySession
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoidm9uZ29jYmFvMTMwOTIwMDE1QGdtYWlsLmNvbSIsImZ1bGxuYW1lIjoiVm8gTmdvYyBCYW8iLCJhdmF0YXIiOiIiLCJ0eXBlIjoicnQiLCJpYXQiOjE3NDUzMTAzMTgsImV4cCI6MTc3Njg2NzkxOH0.lG733nbrEfqjmRkbTQ0nSHf9JIFEXTJmhpi9sq4tMmo"
+}

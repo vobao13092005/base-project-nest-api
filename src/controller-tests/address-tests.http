@@ -1,0 +1,29 @@
+@accessToken = ""
+
+### Add address to user
+POST http://localhost:3000/users/3/addresses
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "detailAddress": "Tổng Bộ Đội Kỵ Sĩ Tây Phong, thành Mondstadt, Mondstadt, Teyvat",
+  "addressName": "Nhà của Venti",
+  "addressPhone": "0987654321",
+  "department":" Tầng 1",
+  "addressNote": "Giao trước cổng"
+}
+
+### Find address by ID
+GET http://localhost:3000/addresses/1
+
+### Update address by ID
+PUT http://localhost:3000/addresses/1
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "addressNote": "Giao trước nhà"
+}
+
+### Delete address by ID
+DELETE http://localhost:3000/addresses/1

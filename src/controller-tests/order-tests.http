@@ -1,0 +1,36 @@
+POST http://localhost:3000/orders
+Content-Type: application/json
+
+{
+  "order": {
+    "orderTotalPrice": 0,
+    "purchaseMethod": "bank",
+    "deliveryStatus": "preparing"
+  },
+  "userId": 1,
+  "addressId": 1,
+  "storeId": 1,
+  "items": [
+    {
+      "item": {
+        "totalPrice": 0,
+        "quantity": 1,
+        "note": "It duong thoi"
+      },
+      "productId": 1,
+      "toppingValues": [9, 11]
+    },
+    {
+      "item": {
+        "totalPrice": 0,
+        "quantity": 2,
+        "note": "It cay thoi"
+      },
+      "productId": 3,
+      "toppingValues": [4, 6]
+    }
+  ]
+}
+
+###
+GET http://localhost:3000/orders/6

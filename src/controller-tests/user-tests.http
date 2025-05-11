@@ -1,0 +1,39 @@
+@accessToken = ""
+
+### Find user by ID
+GET http://localhost:3000/users/3
+Authorization: Bearer ${{accessToken}}
+
+### Add user
+POST http://localhost:3000/users/
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test",
+  "email": "vongocbao130920015@gmail.com",
+  "fullname": "Vo Ngoc Bao",
+  "phoneNumber": "0987654321"
+}
+
+### Update user
+PUT http://localhost:3000/users/3
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "email": "vongocbao130920015@gmail.com",
+  "fullname": "Vo Ngoc Bao"
+}
+
+### Delete user
+DELETE http://localhost:3000/users/3
+Authorization: Bearer ${{accessToken}}
+
+### Get user by Access Token attached in HTTP headers
+GET http://localhost:3000/users/me
+Authorization: Bearer ${{accessToken}}
+
+### Find orders by ID
+GET http://localhost:3000/users/1/orders
+Authorization: Bearer ${{accessToken}}

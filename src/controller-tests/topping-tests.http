@@ -1,0 +1,42 @@
+@accessToken = ""
+
+### Find toppings by store ID
+GET http://localhost:3000/stores/1/toppings
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+### Add topping group for store
+POST http://localhost:3000/stores/1/toppings
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "toppingName": "Độ giòn"
+}
+
+### Add topping group for store
+POST http://localhost:3000/toppings/1/values
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "toppingValueName": "Cay xé lồn",
+  "toppingPrice": 20000
+}
+
+### Get topping values
+GET http://localhost:3000/toppings/1/values
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "toppingValueName": "Cay xé lồn",
+  "toppingPrice": 20000
+}
+
+### Gán topping cho 1 hoặc nhiều sản phẩm
+PUT http://localhost:3000/toppings/1/products
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+[1, 2, 3]

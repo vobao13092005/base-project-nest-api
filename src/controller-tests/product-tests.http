@@ -1,0 +1,36 @@
+@accessToken = ""
+
+### Add product to store
+POST http://localhost:3000/stores/1/products
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "product": {
+    "productName": "Sản phẩm 1",
+    "productPrice": 50000.0,
+    "productDescription": "Mô tả sản phẩm",
+    "productStatus": "available"
+  },
+  "images": []
+}
+
+### Find product by ID
+GET http://localhost:3000/products/3
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+### Update product by ID
+PUT http://localhost:3000/products/1
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "productName": "Sản phẩm (Updated)"
+}
+
+### Delete product by ID
+DELETE http://localhost:3000/products/1
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+

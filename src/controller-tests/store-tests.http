@@ -1,0 +1,46 @@
+@accessToken = ""
+
+### Add store to user
+POST http://localhost:3000/users/1/stores
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "store": {
+    "storeName": "Cửa hàng Gió Vinh Quang - Mondstadt",
+    "storeAddress": "Trước cổng thành Mondstadt",
+    "storePhoneNumber": "0987654321",
+    "openingHours": "6:00",
+    "closingHours": "23:00"
+  },
+  "images": []
+}
+
+### Find store by ID
+GET http://localhost:3000/stores/1
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+### Update store by ID
+PUT http://localhost:3000/stores/1
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+{
+  "storeAddress": "Đằng sau cổng thành Mondstadt"
+}
+
+### Delete store by ID
+DELETE http://localhost:3000/stores/1
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+### Get topping group by store
+GET http://localhost:3000/stores/1/toppings
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
+
+### Get products by store
+GET http://localhost:3000/stores/1/products
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}
