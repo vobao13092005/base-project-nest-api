@@ -11,6 +11,7 @@ import { PasswordService } from 'src/services/password.service';
 import { UploadService } from 'src/services/upload.service';
 import { Topping } from 'src/entities/topping.entity';
 import { ToppingValue } from 'src/entities/topping-value.entity';
+import { Address } from 'src/entities/address.entity';
 
 export class DatabaseSeeder extends Seeder {
 
@@ -33,6 +34,15 @@ export class DatabaseSeeder extends Seeder {
 
     const parentUser = await entityManager.findOneOrFail(User, { userId: 1 })
 
+    const address = new Address();
+    address.addressName = "Nhà của tôi";
+    address.addressNote = "Hihi";
+    address.addressPhone = "09876543221";
+    address.detailAddress = "Cảng Liyue, Teyvat";
+    address.department = "Tầng 1";
+    address.user = parentUser;
+    await entityManager.persistAndFlush(address);
+
     const store = new Store();
     store.storeName = "Tiệm ăn vặt Bolt Baron";
     store.storeAddress = "Ngũ Hành Sơn, Đà Nẵng";
@@ -42,7 +52,7 @@ export class DatabaseSeeder extends Seeder {
     store.closingHours = "12:00";
     store.user = parentUser;
     const storeImage = new StoreImage();
-    storeImage.imageUrl = 'https://cdn.discordapp.com/attachments/1354104325944639528/1369510599851114629/59800.jpg?ex=681c1fa3&is=681ace23&hm=b971f52ea98fad174f324d72a97d75cd946d86d011d4319be90f8600f7827c74&';
+    storeImage.imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl1R5PC0jj1Fzcm-kQEe1yz30b_slRKs4jQ&s';
     store.images.add(storeImage);
     await entityManager.persistAndFlush(store);
 
@@ -55,7 +65,7 @@ export class DatabaseSeeder extends Seeder {
     product_1.productDescription = "Trà sữa (Full topping)";
     product_1.productStatus = ProductStatus.AVAILABLE;
     const productImage_1 = new ProductImage();
-    productImage_1.imageUrl = 'https://cdn.discordapp.com/attachments/1354104325944639528/1369510599851114629/59800.jpg?ex=681c1fa3&is=681ace23&hm=b971f52ea98fad174f324d72a97d75cd946d86d011d4319be90f8600f7827c74&';
+    productImage_1.imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl1R5PC0jj1Fzcm-kQEe1yz30b_slRKs4jQ&s';
     product_1.images.add(productImage_1);
     // Product 2
     const product_2 = new Product();
@@ -64,7 +74,7 @@ export class DatabaseSeeder extends Seeder {
     product_2.productDescription = "Mì cay (Hải sản, Bò)";
     product_2.productStatus = ProductStatus.AVAILABLE;
     const productImage_2 = new ProductImage();
-    productImage_2.imageUrl = 'https://cdn.discordapp.com/attachments/1354104325944639528/1369510599851114629/59800.jpg?ex=681c1fa3&is=681ace23&hm=b971f52ea98fad174f324d72a97d75cd946d86d011d4319be90f8600f7827c74&';
+    productImage_2.imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl1R5PC0jj1Fzcm-kQEe1yz30b_slRKs4jQ&s';
     product_2.images.add(productImage_2);
     // Product 3
     const product_3 = new Product();
@@ -73,7 +83,7 @@ export class DatabaseSeeder extends Seeder {
     product_3.productDescription = "Chân gà (Xả tắc, sốt thái)";
     product_3.productStatus = ProductStatus.AVAILABLE;
     const productImage_3 = new ProductImage();
-    productImage_3.imageUrl = 'https://cdn.discordapp.com/attachments/1354104325944639528/1369510599851114629/59800.jpg?ex=681c1fa3&is=681ace23&hm=b971f52ea98fad174f324d72a97d75cd946d86d011d4319be90f8600f7827c74&';
+    productImage_3.imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl1R5PC0jj1Fzcm-kQEe1yz30b_slRKs4jQ&s';
     product_3.images.add(productImage_3);
 
     parentStore.products.add(product_1, product_2, product_3);

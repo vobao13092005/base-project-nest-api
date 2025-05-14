@@ -1,4 +1,4 @@
-import { EntityManager, FilterQuery } from "@mikro-orm/core";
+import { EntityManager, FilterQuery, FindOptions, Populate } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { apiError } from "src/helpers/response.helper";
 import { StoreService } from "./store.service";
@@ -15,14 +15,18 @@ export class ProductService {
     private readonly uploadService: UploadService,
     private readonly userService: UserService,
   ) { }
-  async findByField(data: FilterQuery<Product>): Promise<Product | null> {
+  async findByField(data: FilterQuery<Product>, options = {}): Promise<Product | null> {
+    if (!('populate' in options)) {
+      options['populate'] = [];
+    }
+    const populate: Populate<Product, any> = ['toppings', 'toppings.toppingValues', ...options['populate'] as Array<string>]
     const product = await this.entityManager.findOne(Product, data, {
-      populate: ['toppings', 'toppings.toppingValues']
+      populate: populate
     });
     return product;
   }
-  async findAll(data: FilterQuery<Product>): Promise<Product[] | null> {
-    const product = await this.entityManager.find(Product, data);
+  async findAll(data: FilterQuery<Product>, options?: FindOptions<Product, any>): Promise<Product[] | null> {
+    const product = await this.entityManager.find(Product, data, options);
     return product;
   }
   async create(storeId: number, product: Product) {

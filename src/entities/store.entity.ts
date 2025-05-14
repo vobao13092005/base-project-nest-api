@@ -43,9 +43,6 @@ export class Store {
   @ManyToOne({ entity: () => User, joinColumn: 'userId', deleteRule: 'cascade', updateRule: 'cascade' })
   user!: User;
 
-  @OneToMany(() => Order, 'store')
-  orders = new Collection<Order>(this);
-
   @OneToMany(() => StoreImage, 'store', { eager: true })
   images = new Collection<StoreImage>(this);
 

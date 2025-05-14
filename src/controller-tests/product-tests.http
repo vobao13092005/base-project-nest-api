@@ -16,7 +16,7 @@ Authorization: Bearer ${{accessToken}}
 }
 
 ### Find product by ID
-GET http://localhost:3000/products/3
+GET http://localhost:3000/products/1
 Content-Type: application/json
 Authorization: Bearer ${{accessToken}}
 

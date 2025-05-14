@@ -1,8 +1,16 @@
-import { Collection, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, Entity, Enum, ManyToMany, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { Order } from "./order.entity";
 import { Product } from "./product.entity";
 import { ToppingValue } from "./topping-value.entity";
 import { OrderTopping } from "./order-topping.entity";
+
+export enum DeliveryStatus {
+  verifying = 'verifying', // Chờ xác nhận
+  preparing = 'preparing', // Chờ lấy hàng
+  delivering = 'delivering', // Đang giao
+  delivered = 'delivered', // Đã giao tới nơi
+  canceled = 'canceled', // Đã huỷ đơn
+}
 
 @Entity({ tableName: 'order_items' })
 export class OrderItem {
@@ -18,6 +26,9 @@ export class OrderItem {
   @Property({ type: 'text', nullable: true })
   note: number;
 
+  @Enum(() => DeliveryStatus)
+  deliveryStatus?: DeliveryStatus;
+
   @ManyToOne({ entity: () => Product, joinColumn: 'productId', updateRule: 'cascade', deleteRule: 'cascade' })
   product?: Product;
 
@@ -32,4 +43,11 @@ export class OrderItem {
 
   @Property({ onUpdate: () => new Date })
   updatedAt: Date = new Date;
+
+  getTotalPrice(): number {
+    const productPrice = this.product!.productPrice;
+    const quantity = this.quantity;
+    const toppingsPrice = this.toppingValues.map(toppingValue => toppingValue.toppingPrice).reduce((a, b) => a + b);
+    return (productPrice + toppingsPrice) * quantity;
+  }
 }

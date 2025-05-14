@@ -1,5 +1,6 @@
 import { AuthService } from "./auth.service";
 import { AddressService } from "./database/address.service";
+import { CartService } from "./database/cart.service";
 import { OrderService } from "./database/order.service";
 import { ProductService } from "./database/product.service";
 import { ReviewService } from "./database/review.service";
@@ -30,6 +31,7 @@ const services = [
   OrderService,
   ToppingService,
   ToppingValueService,
+  CartService,
 ];
 
 export default services;

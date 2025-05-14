@@ -10,7 +10,11 @@ export class SuggestionController {
 
   @Get("/allProducts")
   async allProducts() {
-    const products = await this.productService.findAll({ productId: { $gte: 1 } })
+    const products = await this.productService.findAll({
+      productId: {
+        $gte: 1
+      }
+    });
     return apiResponse("Danh sách sản phẩm", products);
   }
 }

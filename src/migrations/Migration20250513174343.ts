@@ -1,6 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20250509151747 extends Migration {
+export class Migration20250513174343 extends Migration {
 
   override async up(): Promise<void> {
     this.addSql(`create table "roles" ("roleId" serial primary key, "roleLabel" text not null, "rolePriority" int not null, "createdAt" timestamptz not null, "updatedAt" timestamptz not null);`);
@@ -27,9 +27,9 @@ export class Migration20250509151747 extends Migration {
 
     this.addSql(`create table "addresses" ("addressId" serial primary key, "detailAddress" text not null, "addressName" text not null, "addressPhone" text not null, "department" text not null, "addressNote" text not null, "userId" int not null);`);
 
-    this.addSql(`create table "orders" ("orderId" serial primary key, "vnpayOrderId" text not null, "orderTotalPrice" double precision not null, "purchaseMethod" text check ("purchaseMethod" in ('cash', 'bank')) not null, "deliveryStatus" varchar(255) null, "userId" int not null, "addressId" int not null, "storeId" int not null, "createdAt" timestamptz not null, "updatedAt" timestamptz not null);`);
+    this.addSql(`create table "orders" ("orderId" serial primary key, "vnpayOrderId" text null, "orderTotalPrice" double precision null, "isDraft" boolean not null, "purchaseMethod" varchar(255) null, "userId" int not null, "addressId" int null, "createdAt" timestamptz not null, "updatedAt" timestamptz not null);`);
 
-    this.addSql(`create table "order_items" ("orderItemId" serial primary key, "totalPrice" double precision not null, "quantity" int not null, "note" text null, "productId" int not null, "orderId" int not null, "createdAt" timestamptz not null, "updatedAt" timestamptz not null);`);
+    this.addSql(`create table "order_items" ("orderItemId" serial primary key, "totalPrice" double precision not null, "quantity" int not null, "note" text null, "deliveryStatus" text check ("deliveryStatus" in ('verifying', 'preparing', 'delivering', 'delivered', 'canceled')) not null, "productId" int not null, "orderId" int not null, "createdAt" timestamptz not null, "updatedAt" timestamptz not null);`);
 
     this.addSql(`create table "orders_toppings" ("orderToppingId" serial primary key, "orderItemId" int not null, "toppingValueId" int not null);`);
 
@@ -59,7 +59,6 @@ export class Migration20250509151747 extends Migration {
 
     this.addSql(`alter table "orders" add constraint "orders_userId_foreign" foreign key ("userId") references "users" ("userId") on update cascade on delete cascade;`);
     this.addSql(`alter table "orders" add constraint "orders_addressId_foreign" foreign key ("addressId") references "addresses" ("addressId") on update cascade on delete cascade;`);
-    this.addSql(`alter table "orders" add constraint "orders_storeId_foreign" foreign key ("storeId") references "stores" ("storeId") on update cascade on delete cascade;`);
 
     this.addSql(`alter table "order_items" add constraint "order_items_productId_foreign" foreign key ("productId") references "products" ("productId") on update cascade on delete cascade;`);
     this.addSql(`alter table "order_items" add constraint "order_items_orderId_foreign" foreign key ("orderId") references "orders" ("orderId") on update cascade on delete cascade;`);
@@ -91,8 +90,6 @@ export class Migration20250509151747 extends Migration {
     this.addSql(`alter table "store_images" drop constraint "store_images_storeId_foreign";`);
 
     this.addSql(`alter table "products" drop constraint "products_storeId_foreign";`);
-
-    this.addSql(`alter table "orders" drop constraint "orders_storeId_foreign";`);
 
     this.addSql(`alter table "topping_values" drop constraint "topping_values_toppingId_foreign";`);
 

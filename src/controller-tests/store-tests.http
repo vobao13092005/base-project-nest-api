@@ -44,3 +44,8 @@ Authorization: Bearer ${{accessToken}}
 GET http://localhost:3000/stores/1/products
 Content-Type: application/json
 Authorization: Bearer ${{accessToken}}
+
+### Get orders by store
+GET http://localhost:3000/stores/1/orders
+Content-Type: application/json
+Authorization: Bearer ${{accessToken}}

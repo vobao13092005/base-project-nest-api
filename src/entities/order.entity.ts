@@ -9,31 +9,23 @@ export enum PurchaseMethod {
   BANK = 'bank',
 };
 
-export enum DeliveryStatus {
-  verifying = 'verifying', // Chờ xác nhận
-  preparing = 'preparing', // Chờ lấy hàng
-  delivering = 'delivering', // Đang giao
-  delivered = 'delivered', // Đã giao tới nơi
-}
-
-
 @Entity({ tableName: 'orders' })
 export class Order {
   @PrimaryKey()
-  orderId!: number;
+  orderId?: number;
 
-  @Property({ type: 'text' })
-  vnpayOrderId: string;
+  @Property({ type: 'text', nullable: true })
+  vnpayOrderId?: string;
 
-  @Property({ type: 'double' })
-  orderTotalPrice!: number;
+  @Property({ type: 'double', nullable: true })
+  orderTotalPrice?: number;
 
-  @Enum(() => PurchaseMethod)
-  purchaseMethod!: PurchaseMethod;
+  @Property({ type: 'boolean' })
+  isDraft!: boolean;
 
   @Property({ nullable: true })
-  @Enum(() => DeliveryStatus)
-  deliveryStatus?: DeliveryStatus;
+  @Enum(() => PurchaseMethod)
+  purchaseMethod?: PurchaseMethod;
 
   @ManyToOne({ entity: () => User, joinColumn: 'userId', deleteRule: 'cascade', updateRule: 'cascade' })
   user?: User;
@@ -41,11 +33,8 @@ export class Order {
   @OneToMany(() => OrderItem, 'order')
   orderItems = new Collection<OrderItem>(this);
 
-  @ManyToOne({ entity: () => Address, joinColumn: 'addressId', updateRule: 'cascade', deleteRule: 'cascade' })
+  @ManyToOne({ entity: () => Address, joinColumn: 'addressId', updateRule: 'cascade', deleteRule: 'cascade', nullable: true })
   address?: Address;
-
-  @ManyToOne({ entity: () => Store, joinColumn: 'storeId', updateRule: 'cascade', deleteRule: 'cascade' })
-  store?: Store;
 
   @Property()
   createdAt: Date = new Date;

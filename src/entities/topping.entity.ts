@@ -13,7 +13,7 @@ export class Topping {
 
   // Quyết định nhóm topping này có thể chọn nhiều hay chỉ có thể chọn 1.
   @Property({ type: 'boolean' })
-  multiple: boolean;
+  multiple!: boolean;
 
   @ManyToMany({ entity: () => Product, mappedBy: product => product.toppings })
   products = new Collection<Product>(this);

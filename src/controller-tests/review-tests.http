@@ -16,9 +16,15 @@ Authorization: Bearer ${{accessToken}}
 ### Get review by ID
 GET http://localhost:3000/reviews/1
 
+### Get review by ID
+GET http://localhost:3000/products/1/userHasReview?userId=1
+
 ### Update review by ID
 PUT http://localhost:3000/reviews/1
+
 {
   "reviewContent": "Lồz",
   "reviewScore": 5,
 }
+###
+GET http://localhost:3000/products/1/reviews

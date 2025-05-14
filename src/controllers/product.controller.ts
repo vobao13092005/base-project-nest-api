@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { Product } from "src/entities/product.entity";
 import { Review } from "src/entities/review.entity";
@@ -62,6 +62,38 @@ export class ProductController {
   ) {
     await this.reviewService.create(productId, data);
     return apiResponse('Thêm đánh giá thành công');
+  }
+
+  // Thêm đánh giá cho sản phẩm
+  @Get(":productId/reviews")
+  async getReviews(
+    @Param('productId', ParseIntPipe) productId: number,
+  ) {
+    const product = await this.productService.findByField({ productId }, {
+      populate: ['reviews.user']
+    });
+    await product?.reviews.load();
+    return apiResponse('Thêm đánh giá thành công', product?.reviews);
+  }
+
+  // Kiểm tra người dùng có thể viết đánh giá không
+  @Get(":productId/canWriteReview")
+  async canWriteReview(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Query('userId', ParseIntPipe) userId: number,
+  ) {
+    const result = await this.reviewService.canWriteReview(userId, productId);
+    return apiResponse("", result);
+  }
+
+  // Kiểm tra người dùng đã có đánh giá về sản phẩm này chưa
+  @Get(":productId/userHasReview")
+  async userHasReview(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Query('userId', ParseIntPipe) userId: number,
+  ) {
+    const review = await this.reviewService.userHasReview(userId, productId);
+    return apiResponse("", review);
   }
 
   // Xoá ảnh cho sản phẩm

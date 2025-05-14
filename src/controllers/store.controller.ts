@@ -1,9 +1,12 @@
+import { EntityManager } from "@mikro-orm/postgresql";
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
+import { OrderItem } from "src/entities/order-item.entity";
 import { Product } from "src/entities/product.entity";
 import { Store } from "src/entities/store.entity";
 import { Topping } from "src/entities/topping.entity";
 import { apiError, apiResponse } from "src/helpers/response.helper";
+import { OrderService } from "src/services/database/order.service";
 import { StoreService } from "src/services/database/store.service";
 import { ToppingService } from "src/services/database/topping.service";
 
@@ -16,6 +19,8 @@ export class StoreController {
   constructor(
     private readonly storeService: StoreService,
     private readonly toppingService: ToppingService,
+    private readonly orderService: OrderService,
+    private readonly entityManager: EntityManager,
   ) { }
 
   // Sửa cửa hàng
@@ -108,5 +113,25 @@ export class StoreController {
     }
     await store.toppings.load();
     return apiResponse('Danh sách topping', store.toppings);
+  }
+  // Danh sách order của cửa hàng
+  @Get('/:storeId/orders')
+  async getStoreOrders(
+    @Param('storeId', ParseIntPipe) storeId: number,
+  ) {
+    const storeOrders = await this.entityManager.findAll(OrderItem, {
+      populate: ['toppingValues', 'toppingValues.topping'],
+      where: {
+        product: {
+          store: {
+            storeId: storeId
+          }
+        },
+        order: {
+          isDraft: false,
+        }
+      }
+    });
+    return apiResponse('Danh sách đơn hàng', storeOrders);
   }
 }

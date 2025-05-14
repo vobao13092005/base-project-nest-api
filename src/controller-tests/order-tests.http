@@ -33,4 +33,4 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/orders/6
+GET http://localhost:3000/orders/1

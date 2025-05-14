@@ -35,9 +35,8 @@ export class ToppingService {
       throw apiError('Không thể tìm thấy topping');
     }
     const entity = this.entityManager.create(ToppingValue, toppingValue);
-    await topping.toppingValues.load();
-    topping.toppingValues.add(entity);
-    await this.entityManager.persistAndFlush(topping);
+    entity.topping = topping;
+    await this.entityManager.persistAndFlush(entity);
   }
 
   async toppingProductInsert(toppingId: number, products: number[]) {

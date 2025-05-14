@@ -1075,7 +1075,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "text"
         },
         "orderTotalPrice": {
@@ -1084,24 +1084,20 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "double"
         },
-        "purchaseMethod": {
-          "name": "purchaseMethod",
-          "type": "text",
+        "isDraft": {
+          "name": "isDraft",
+          "type": "boolean",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "enumItems": [
-            "cash",
-            "bank"
-          ],
-          "mappedType": "enum"
+          "mappedType": "boolean"
         },
-        "deliveryStatus": {
-          "name": "deliveryStatus",
+        "purchaseMethod": {
+          "name": "purchaseMethod",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -1125,16 +1121,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "storeId": {
-          "name": "storeId",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
+          "nullable": true,
           "mappedType": "integer"
         },
         "createdAt": {
@@ -1199,19 +1186,6 @@
           "referencedTableName": "public.addresses",
           "deleteRule": "cascade",
           "updateRule": "cascade"
-        },
-        "orders_storeId_foreign": {
-          "constraintName": "orders_storeId_foreign",
-          "columnNames": [
-            "storeId"
-          ],
-          "localTableName": "public.orders",
-          "referencedColumnNames": [
-            "storeId"
-          ],
-          "referencedTableName": "public.stores",
-          "deleteRule": "cascade",
-          "updateRule": "cascade"
         }
       },
       "nativeEnums": {}
@@ -1253,6 +1227,22 @@
           "primary": false,
           "nullable": true,
           "mappedType": "text"
+        },
+        "deliveryStatus": {
+          "name": "deliveryStatus",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "verifying",
+            "preparing",
+            "delivering",
+            "delivered",
+            "canceled"
+          ],
+          "mappedType": "enum"
         },
         "productId": {
           "name": "productId",

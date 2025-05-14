@@ -12,7 +12,6 @@ export type OrderItemWithToppings = {
 
 export type CreateOrderData = {
   order: Order;
-  storeId: number;
   userId: number;
   addressId: number;
   items: OrderItemWithToppings[]

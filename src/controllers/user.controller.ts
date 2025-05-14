@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, Request, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Req, Request, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { User } from "src/entities/user.entity";
 import { AuthGuard } from "src/guards/auth.guard";
@@ -6,6 +6,10 @@ import { apiError, apiResponse } from "src/helpers/response.helper";
 import { UserService } from "src/services/database/user.service";
 import { Store } from "src/entities/store.entity";
 import { Address } from "src/entities/address.entity";
+import { EntityManager } from "@mikro-orm/postgresql";
+import { OrderItem } from "src/entities/order-item.entity";
+import { OrderItemWithToppings } from "./order.controller";
+import { CartService } from "src/services/database/cart.service";
 
 export type InsertStoreData = {
   store: Store;
@@ -15,6 +19,8 @@ export type InsertStoreData = {
 export class UserController {
   constructor(
     private readonly userService: UserService,
+    private readonly entityManager: EntityManager,
+    private readonly cartService: CartService
   ) { }
 
   // Thêm người dùng
@@ -91,14 +97,39 @@ export class UserController {
   // Lấy đơn hàng theo người dùng
   @Get(':userId/orders')
   async getOrders(
-    @Param('userId') userId: string
+    @Param('userId', ParseIntPipe) userId: number
   ) {
-    const user = await this.userService.findByField({ userId: +userId });
-    if (!user) {
-      throw apiError(`Không tìm thấy người dùng ${userId}`)
+    const userOrders = await this.entityManager.findAll(OrderItem, {
+      populate: ['toppingValues', 'toppingValues.topping', 'product'],
+      where: {
+        order: {
+          user: {
+            userId: userId
+          },
+          isDraft: false,
+        }
+      },
+    });
+    return apiResponse("Danh sách cửa hàng của người dùng", userOrders);
+  }
+
+  @Post("/:userId/cart")
+  async insertToCart(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() orderItemWithToppings: OrderItemWithToppings
+  ) {
+    await this.cartService.insertToUserCart(userId, orderItemWithToppings);
+  }
+
+  @Get("/:userId/cart")
+  async getUserCart(
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    const cart = await this.cartService.getUserCart(userId);
+    if (null === cart) {
+      return apiResponse('Giỏ hàng trống', []);
     }
-    await user.orders.load();
-    return apiResponse("Danh sách cửa hàng của người dùng", user.orders);
+    return apiResponse('Giỏ hàng người dùng', cart);
   }
 
   // Lấy thông tin người dùng của session (refresh token)
@@ -110,29 +141,5 @@ export class UserController {
       throw apiError(`Không tìm thấy người dùng ${request['user'].userId}`)
     }
     return apiResponse(`Thông tin người dùng ${user?.username}`, user);
-  }
-
-  // Upload ảnh đại diện người dùng
-  @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor('file'))
-  @Post('avatar')
-  async uploadAvatar(@UploadedFile() file: Express.Multer.File) {
-    const form = new FormData();
-    form.append("file", new Blob([file.buffer]), file.originalname);
-
-    const response = await fetch("https://discord.com/api/webhooks/1354104392416235674/MMtRy_UqYDB4XOEw4HGqDdxPOwLJHoNFAUvnSe3IXTk9n67bnfnvdvs7kwnfG6qLFhk1", {
-      method: "POST",
-      body: form,
-    });
-    const json = await response.json();
-    const discordImageUrls = json.attachments.map(attachment => {
-      return {
-        url: attachment.url,
-        filename: attachment.filename,
-        size: +(Number.parseInt(attachment.size) / 1024 / 1024).toFixed(2)
-      };
-    });
-    console.log(discordImageUrls);
-    return apiResponse(discordImageUrls);
   }
 }

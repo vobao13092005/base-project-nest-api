@@ -37,3 +37,7 @@ Authorization: Bearer ${{accessToken}}
 ### Find orders by ID
 GET http://localhost:3000/users/1/orders
 Authorization: Bearer ${{accessToken}}
+
+### Find orders by ID
+GET http://localhost:3000/users/1/cart
+Authorization: Bearer ${{accessToken}}

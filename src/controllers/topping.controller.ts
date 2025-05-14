@@ -30,6 +30,7 @@ export class ToppingController {
     if (null === topping) {
       throw apiResponse('Không tìm thấy topping');
     }
+    await topping.toppingValues.load();
     return apiResponse('Danh sách topping', topping.toppingValues);
   }
 
