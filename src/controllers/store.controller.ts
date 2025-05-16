@@ -120,7 +120,7 @@ export class StoreController {
     @Param('storeId', ParseIntPipe) storeId: number,
   ) {
     const storeOrders = await this.entityManager.findAll(OrderItem, {
-      populate: ['toppingValues', 'toppingValues.topping'],
+      populate: ['toppingValues', 'toppingValues.topping', 'product', 'order', 'order.user', 'order.address'],
       where: {
         product: {
           store: {

@@ -27,7 +27,7 @@ export class UserController {
   @Post()
   async create(@Body() request: User) {
     await this.userService.create(request);
-    return {};
+    return apiResponse('Tạo tài khoản thành công');
   }
 
   // Sửa người dùng

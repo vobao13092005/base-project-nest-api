@@ -55,4 +55,19 @@ export class ToppingService {
     topping.products.set(productEntities);
     await this.entityManager.persistAndFlush(topping);
   }
+  async deleteTopping(toppingId: number) {
+    const topping = await this.findByField({ toppingId });
+    if (null === topping) {
+      throw apiError('');
+    }
+    await this.entityManager.removeAndFlush(topping);
+  }
+  async updateTopping(toppingId: number, topping: Topping) {
+    const foundEntity = await this.findByField({ toppingId });
+    if (null === foundEntity) {
+      throw apiError('');
+    }
+    this.entityManager.assign(foundEntity, topping);
+    await this.entityManager.flush();
+  }
 }

@@ -36,7 +36,9 @@ export class ProductController {
   // Lấy thông tin sản phẩm
   @Get(':productId')
   async getProduct(@Param('productId', ParseIntPipe) productId: number) {
-    const product = await this.productService.findByField({ productId });
+    const product = await this.productService.findByField({ productId }, {
+      populate: ['store']
+    });
     if (null === product) {
       throw apiError('Không tìm thấy sản phẩm');
     }

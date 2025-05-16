@@ -38,7 +38,10 @@ export class ReviewService {
     await this.entityManager.flush();
   }
   async delete(reviewId: number) {
-    const reviewEntity = await this.entityManager.findOneOrFail(Review, { reviewId });
+    const reviewEntity = await this.entityManager.findOne(Review, { reviewId });
+    if (null === reviewEntity) {
+      throw apiError('Không tìm thấy đánh giá');
+    }
     await this.entityManager.removeAndFlush(reviewEntity);
   }
   async canWriteReview(userId: number, productId: number) {

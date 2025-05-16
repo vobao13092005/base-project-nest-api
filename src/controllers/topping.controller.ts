@@ -1,7 +1,8 @@
 import { Primary } from "@mikro-orm/core";
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { Product } from "src/entities/product.entity";
 import { ToppingValue } from "src/entities/topping-value.entity";
+import { Topping } from "src/entities/topping.entity";
 import { apiResponse } from "src/helpers/response.helper";
 import { ToppingService } from "src/services/database/topping.service";
 
@@ -10,6 +11,32 @@ export class ToppingController {
   constructor(
     private readonly toppingService: ToppingService,
   ) { }
+
+  @Get(':toppingId')
+  async getTopping(
+    @Param('toppingId', ParseIntPipe) toppingId: number,
+  ) {
+    const topping = await this.toppingService.findByField({ toppingId });
+    if (null === topping) {
+      throw apiResponse('Không tìm thấy topping');
+    }
+    return apiResponse('Chi tiết topping', topping);
+  }
+
+  @Delete(':toppingId')
+  async deleteTopping(
+    @Param('toppingId', ParseIntPipe) toppingId: number,
+  ) {
+    await this.toppingService.deleteTopping(toppingId);
+  }
+
+  @Put(':toppingId')
+  async updateTopping(
+    @Param('toppingId', ParseIntPipe) toppingId: number,
+    @Body() topping: Topping,
+  ) {
+    await this.toppingService.updateTopping(toppingId, topping);
+  }
 
   // Thêm giá trị cho nhóm topping
   @Post(':toppingId/values')

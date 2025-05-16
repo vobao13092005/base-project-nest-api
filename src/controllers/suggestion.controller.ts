@@ -14,6 +14,8 @@ export class SuggestionController {
       productId: {
         $gte: 1
       }
+    }, {
+      populate: ['store'],
     });
     return apiResponse("Danh sách sản phẩm", products);
   }

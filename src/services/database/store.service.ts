@@ -39,7 +39,7 @@ export class StoreService {
     if (null === store) {
       throw apiError('Không tìm thấy cửa hàng tương ứng');
     }
-    const discordUploadedImages = await this.uploadService.uploadToDiscord(images);
+    const discordUploadedImages = await this.uploadService.uploadToCatbox(images);
     const storeImages = discordUploadedImages.map(image => {
       const storeImage = new StoreImage();
       storeImage.imageUrl = image.url;
@@ -66,7 +66,7 @@ export class StoreService {
     const product = this.entityManager.create(Product, data.product);
     if (data.images?.length !== 0) {
       // Gán ảnh vào cửa hàng
-      const uploadResponse = await this.uploadService.uploadToDiscord(data.images!);
+      const uploadResponse = await this.uploadService.uploadToCatbox(data.images!);
       await product.images.load();
       const productImages: ProductImage[] = [];
       uploadResponse.forEach(discordUploadResponse => {

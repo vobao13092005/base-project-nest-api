@@ -21,12 +21,13 @@ export class ReviewController {
     @Body() reivew: Review
   ) {
     const review = await this.reviewService.update(reviewId, reivew);
-    return apiResponse('OK', review);
+    return apiResponse('Cập nhật đánh giá thành công', review);
   }
   @Delete(':reviewId')
   async deleteReview(
     @Param('reviewId', ParseIntPipe) reviewId: number,
   ) {
     await this.reviewService.delete(reviewId);
+    return apiResponse('Xoá đánh giá thành công');
   }
 }

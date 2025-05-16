@@ -19,14 +19,26 @@ export class ProductService {
     if (!('populate' in options)) {
       options['populate'] = [];
     }
-    const populate: Populate<Product, any> = ['toppings', 'toppings.toppingValues', ...options['populate'] as Array<string>]
+    const populate: Populate<Product, any> = ['toppings',
+      'toppings.toppingValues',
+      ...options['populate'] as Array<string>,
+    ]
     const product = await this.entityManager.findOne(Product, data, {
       populate: populate
     });
     return product;
   }
-  async findAll(data: FilterQuery<Product>, options?: FindOptions<Product, any>): Promise<Product[] | null> {
-    const product = await this.entityManager.find(Product, data, options);
+  async findAll(data: FilterQuery<Product>, options = {}): Promise<Product[] | null> {
+    if (!('populate' in options)) {
+      options['populate'] = [];
+    }
+    const populate: Populate<Product, any> = ['toppings',
+      'toppings.toppingValues',
+      ...options['populate'] as Array<string>,
+    ]
+    const product = await this.entityManager.find(Product, data, {
+      populate: populate
+    });
     return product;
   }
   async create(storeId: number, product: Product) {
@@ -58,7 +70,7 @@ export class ProductService {
     if (null === product) {
       throw apiError('Không tìm thấy cửa hàng tương ứng');
     }
-    const discordUploadedImages = await this.uploadService.uploadToDiscord(images);
+    const discordUploadedImages = await this.uploadService.uploadToCatbox(images);
     const storeImages = discordUploadedImages.map(image => {
       const productImage = new ProductImage();
       productImage.imageUrl = image.url;

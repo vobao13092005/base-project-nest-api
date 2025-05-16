@@ -90,7 +90,7 @@ export class UserService {
     const store = this.entityManager.create(Store, data.store);
     if (data.images?.length !== 0) {
       // Gán ảnh vào cửa hàng
-      const uploadResponse = await this.uploadService.uploadToDiscord(data.images!);
+      const uploadResponse = await this.uploadService.uploadToCatbox(data.images!);
       await store.images.load();
       const storeImages: StoreImage[] = [];
       uploadResponse.forEach(discordUploadResponse => {
