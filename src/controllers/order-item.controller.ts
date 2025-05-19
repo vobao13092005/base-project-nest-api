@@ -1,4 +1,4 @@
-import { EntityManager } from "@mikro-orm/postgresql";
+import { EntityManager } from "@mikro-orm/core";
 import { Body, Controller, Param, ParseIntPipe, Put } from "@nestjs/common";
 import { DeliveryStatus, OrderItem } from "src/entities/order-item.entity";
 import { apiError, apiResponse } from "src/helpers/response.helper";

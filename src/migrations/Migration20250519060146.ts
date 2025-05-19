@@ -1,8 +1,10 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20250513174343 extends Migration {
+export class Migration20250519060146 extends Migration {
 
   override async up(): Promise<void> {
+    this.addSql(`create table "categories" ("categoryId" serial primary key, "categoryName" varchar(255) not null, "categoryDescription" varchar(255) not null);`);
+
     this.addSql(`create table "roles" ("roleId" serial primary key, "roleLabel" text not null, "rolePriority" int not null, "createdAt" timestamptz not null, "updatedAt" timestamptz not null);`);
 
     this.addSql(`create table "users" ("userId" serial primary key, "username" text not null, "password" text not null, "email" text not null, "fullname" text not null, "avatar" text null, "phoneNumber" text not null, "createdAt" timestamptz not null, "updatedAt" timestamptz not null);`);
@@ -20,6 +22,8 @@ export class Migration20250513174343 extends Migration {
     this.addSql(`create table "products_toppings" ("productToppingId" serial primary key, "productId" int not null, "toppingId" int not null);`);
 
     this.addSql(`create table "product_images" ("productImageId" serial primary key, "imageUrl" text not null, "productId" int not null);`);
+
+    this.addSql(`create table "products_categories" ("orderToppingId" serial primary key, "productId" int not null, "categoryId1" int not null);`);
 
     this.addSql(`create table "sessions" ("sessionId" serial primary key, "refreshToken" text not null, "userId" int not null, "createdAt" timestamptz not null, "updatedAt" timestamptz not null);`);
 
@@ -50,6 +54,9 @@ export class Migration20250513174343 extends Migration {
 
     this.addSql(`alter table "product_images" add constraint "product_images_productId_foreign" foreign key ("productId") references "products" ("productId") on update cascade on delete cascade;`);
 
+    this.addSql(`alter table "products_categories" add constraint "products_categories_productId_foreign" foreign key ("productId") references "products" ("productId") on update cascade on delete cascade;`);
+    this.addSql(`alter table "products_categories" add constraint "products_categories_categoryId1_foreign" foreign key ("categoryId1") references "categories" ("categoryId") on update cascade on delete cascade;`);
+
     this.addSql(`alter table "sessions" add constraint "sessions_userId_foreign" foreign key ("userId") references "users" ("userId") on update cascade on delete cascade;`);
 
     this.addSql(`alter table "reviews" add constraint "reviews_userId_foreign" foreign key ("userId") references "users" ("userId") on update cascade on delete cascade;`);
@@ -71,6 +78,8 @@ export class Migration20250513174343 extends Migration {
   }
 
   override async down(): Promise<void> {
+    this.addSql(`alter table "products_categories" drop constraint "products_categories_categoryId1_foreign";`);
+
     this.addSql(`alter table "users_roles" drop constraint "users_roles_roleId_foreign";`);
 
     this.addSql(`alter table "stores" drop constraint "stores_userId_foreign";`);
@@ -101,6 +110,8 @@ export class Migration20250513174343 extends Migration {
 
     this.addSql(`alter table "product_images" drop constraint "product_images_productId_foreign";`);
 
+    this.addSql(`alter table "products_categories" drop constraint "products_categories_productId_foreign";`);
+
     this.addSql(`alter table "reviews" drop constraint "reviews_productId_foreign";`);
 
     this.addSql(`alter table "order_items" drop constraint "order_items_productId_foreign";`);
@@ -110,6 +121,8 @@ export class Migration20250513174343 extends Migration {
     this.addSql(`alter table "order_items" drop constraint "order_items_orderId_foreign";`);
 
     this.addSql(`alter table "orders_toppings" drop constraint "orders_toppings_orderItemId_foreign";`);
+
+    this.addSql(`drop table if exists "categories" cascade;`);
 
     this.addSql(`drop table if exists "roles" cascade;`);
 
@@ -128,6 +141,8 @@ export class Migration20250513174343 extends Migration {
     this.addSql(`drop table if exists "products_toppings" cascade;`);
 
     this.addSql(`drop table if exists "product_images" cascade;`);
+
+    this.addSql(`drop table if exists "products_categories" cascade;`);
 
     this.addSql(`drop table if exists "sessions" cascade;`);
 

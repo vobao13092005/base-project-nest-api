@@ -12,6 +12,7 @@ import { UploadService } from 'src/services/upload.service';
 import { Topping } from 'src/entities/topping.entity';
 import { ToppingValue } from 'src/entities/topping-value.entity';
 import { Address } from 'src/entities/address.entity';
+import { Category } from 'src/entities/category.entity';
 
 export class DatabaseSeeder extends Seeder {
 
@@ -21,8 +22,7 @@ export class DatabaseSeeder extends Seeder {
     const userService = new UserService(entityManager, passwordService, uploadService);
 
     const roleUser = new Role("User", 1);
-    const roleAdmin = new Role("User", 1);
-    await entityManager.persistAndFlush([roleUser, roleAdmin]);
+    await entityManager.persistAndFlush(roleUser);
     const user = new User();
     user.username = "test";
     user.password = "test";
@@ -65,7 +65,7 @@ export class DatabaseSeeder extends Seeder {
     product_1.productDescription = "Trà sữa (Full topping)";
     product_1.productStatus = ProductStatus.AVAILABLE;
     const productImage_1 = new ProductImage();
-    productImage_1.imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl1R5PC0jj1Fzcm-kQEe1yz30b_slRKs4jQ&s';
+    productImage_1.imageUrl = 'https://hunufa.vn/wp-content/uploads/2024/10/hinh-ly-tra-sua-dep-46.webp';
     product_1.images.add(productImage_1);
     // Product 2
     const product_2 = new Product();
@@ -74,7 +74,7 @@ export class DatabaseSeeder extends Seeder {
     product_2.productDescription = "Mì cay (Hải sản, Bò)";
     product_2.productStatus = ProductStatus.AVAILABLE;
     const productImage_2 = new ProductImage();
-    productImage_2.imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl1R5PC0jj1Fzcm-kQEe1yz30b_slRKs4jQ&s';
+    productImage_2.imageUrl = 'https://files.catbox.moe/xqpfga.png';
     product_2.images.add(productImage_2);
     // Product 3
     const product_3 = new Product();
@@ -83,7 +83,7 @@ export class DatabaseSeeder extends Seeder {
     product_3.productDescription = "Chân gà (Xả tắc, sốt thái)";
     product_3.productStatus = ProductStatus.AVAILABLE;
     const productImage_3 = new ProductImage();
-    productImage_3.imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKl1R5PC0jj1Fzcm-kQEe1yz30b_slRKs4jQ&s';
+    productImage_3.imageUrl = 'https://files.catbox.moe/m6f8lv.png';
     product_3.images.add(productImage_3);
 
     parentStore.products.add(product_1, product_2, product_3);
@@ -165,5 +165,42 @@ export class DatabaseSeeder extends Seeder {
     const product_3_Parent = await entityManager.findOneOrFail(Product, { productId: 3 });
     product_3_Parent.toppings.add([topping_3, topping_4]);
     await entityManager.persistAndFlush([product_1_Parent, product_2_Parent, product_3_Parent]);
+    const categories = [
+      {
+        categoryId: 1,
+        categoryName: 'Món chính',
+        categoryDescription: 'Các món ăn chính trong bữa ăn như cơm, phở, bún, mì.',
+      },
+      {
+        categoryId: 2,
+        categoryName: 'Món khai vị',
+        categoryDescription: 'Những món ăn nhẹ dùng trước bữa chính như gỏi cuốn, súp.',
+      },
+      {
+        categoryId: 3,
+        categoryName: 'Món tráng miệng',
+        categoryDescription: 'Các món ngọt dùng sau bữa ăn như chè, kem, bánh ngọt.',
+      },
+      {
+        categoryId: 4,
+        categoryName: 'Đồ uống',
+        categoryDescription: 'Các loại nước giải khát như nước ép, trà, sinh tố.',
+      },
+      {
+        categoryId: 5,
+        categoryName: 'Đồ ăn nhanh',
+        categoryDescription: 'Các món ăn tiện lợi như bánh mì, hamburger, khoai tây chiên.',
+      },
+    ];
+    const tasks: Promise<void>[] = [];
+    for (const category of categories) {
+      const entity = new Category();
+      entity.categoryName = category.categoryName;
+      entity.categoryDescription = category.categoryDescription;
+      const createEntity = entityManager.create(Category, entity);
+      const task = entityManager.persistAndFlush(createEntity);
+      tasks.push(task);
+    }
+    await Promise.all(tasks);
   }
 }

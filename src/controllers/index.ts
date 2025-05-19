@@ -1,6 +1,7 @@
 import { AddressController } from "./address.controller";
 import { AuthController } from "./auth.controller";
 import { CartController } from "./cart.controller";
+import { CategoryController } from "./category.controller";
 import { OrderItemController } from "./order-item.controller";
 import { OrderController } from "./order.controller";
 import { PaymentController } from "./payment.controller";
@@ -29,7 +30,8 @@ const controllers = [
   CartController,
   OrderItemController,
   SearchController,
-  ToppingValueController
+  ToppingValueController,
+  CategoryController,
 ];
 
 export default controllers;

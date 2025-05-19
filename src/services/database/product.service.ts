@@ -5,7 +5,7 @@ import { StoreService } from "./store.service";
 import { Product } from "src/entities/product.entity";
 import { UploadService } from "../upload.service";
 import { ProductImage } from "src/entities/product-image.entity";
-import { UserService } from "./user.service";
+import { DeliveryStatus } from "src/entities/order-item.entity";
 
 @Injectable()
 export class ProductService {
@@ -13,14 +13,15 @@ export class ProductService {
     private readonly entityManager: EntityManager,
     private readonly storeService: StoreService,
     private readonly uploadService: UploadService,
-    private readonly userService: UserService,
   ) { }
   async findByField(data: FilterQuery<Product>, options = {}): Promise<Product | null> {
     if (!('populate' in options)) {
       options['populate'] = [];
     }
-    const populate: Populate<Product, any> = ['toppings',
+    const populate: Populate<Product, any> = [
+      'toppings',
       'toppings.toppingValues',
+      'categories',
       ...options['populate'] as Array<string>,
     ]
     const product = await this.entityManager.findOne(Product, data, {
@@ -32,8 +33,10 @@ export class ProductService {
     if (!('populate' in options)) {
       options['populate'] = [];
     }
-    const populate: Populate<Product, any> = ['toppings',
+    const populate: Populate<Product, any> = [
+      'toppings',
       'toppings.toppingValues',
+      'categories',
       ...options['populate'] as Array<string>,
     ]
     const product = await this.entityManager.find(Product, data, {
@@ -87,6 +90,23 @@ export class ProductService {
         $in: imageIdList
       }
     });
+  }
+
+  async getStats(productId: number) {
+    const totalSoldResult = await this.entityManager.getConnection().execute(`
+      SELECT COALESCE(SUM("quantity"), 0) AS "totalSold"
+      FROM "order_items"
+      WHERE "productId" = ? AND "deliveryStatus" = ?;
+    `, [productId, DeliveryStatus.delivered]);
+    const averageRatingResult = await this.entityManager.getConnection().execute(`
+      SELECT COALESCE(ROUND(AVG("reviewScore"), 1), 0) AS "averageRating"
+      FROM "reviews"
+      WHERE "productId" = ?;
+    `, [productId]);
+    return {
+      totalSold: totalSoldResult[0]['totalSold'],
+      averageRating: averageRatingResult[0]['averageRating']
+    };
   }
 
 }

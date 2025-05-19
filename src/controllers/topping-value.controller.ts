@@ -1,4 +1,4 @@
-import { EntityManager } from "@mikro-orm/postgresql";
+import { EntityManager } from "@mikro-orm/core";
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Put } from "@nestjs/common";
 import { ToppingValue } from "src/entities/topping-value.entity";
 import { apiError, apiResponse } from "src/helpers/response.helper";

@@ -1,4 +1,4 @@
-import { EntityManager } from "@mikro-orm/postgresql";
+import { EntityManager } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { CreateOrderData, OrderItemWithToppings } from "src/controllers/order.controller";
 import { ProductService } from "./product.service";

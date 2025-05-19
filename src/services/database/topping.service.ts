@@ -1,5 +1,5 @@
 import { FilterQuery, Primary } from "@mikro-orm/core";
-import { EntityManager } from "@mikro-orm/postgresql";
+import { EntityManager } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { Topping } from "src/entities/topping.entity";
 import { StoreService } from "./store.service";

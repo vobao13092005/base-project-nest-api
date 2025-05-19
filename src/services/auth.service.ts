@@ -1,4 +1,4 @@
-import { EntityManager } from "@mikro-orm/postgresql";
+import { EntityManager } from "@mikro-orm/core";
 import { Injectable } from "@nestjs/common";
 import { LoginCredentials } from "src/controllers/auth.controller";
 import { User } from "src/entities/user.entity";

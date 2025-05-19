@@ -1,4 +1,4 @@
-import { EntityManager, FilterQuery, Primary } from "@mikro-orm/postgresql";
+import { EntityManager, FilterQuery, Primary } from "@mikro-orm/core";
 import { Get, Injectable, Param, ParseIntPipe } from "@nestjs/common";
 import { CreateOrderData, OrderItemWithToppings } from "src/controllers/order.controller";
 import { OrderItem } from "src/entities/order-item.entity";

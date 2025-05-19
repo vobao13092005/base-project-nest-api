@@ -1,5 +1,6 @@
-import { defineConfig, EntityCaseNamingStrategy, LoadStrategy } from "@mikro-orm/core";
+import { defineConfig, EntityCaseNamingStrategy } from "@mikro-orm/core";
 import { Migrator } from "@mikro-orm/migrations";
+import { MySqlDriver } from "@mikro-orm/mysql";
 import { MikroOrmModuleSyncOptions } from "@mikro-orm/nestjs";
 import { PostgreSqlDriver } from "@mikro-orm/postgresql";
 import { SeedManager } from "@mikro-orm/seeder";
@@ -8,11 +9,11 @@ const mikroConfig: MikroOrmModuleSyncOptions = {
   entities: ['./dist/**/*.entity.js'],
   entitiesTs: ['./src/**/*.entity.ts'],
   dbName: 'BaseProject',
-  schema: 'public',
   user: 'postgres',
-  password: 'uoc_j_toi_co_mot_con_meo',
+  password: 'postgres',
   host: 'localhost',
-  port: 1309,
+  schema: "public",
+  port: 5432,
   namingStrategy: EntityCaseNamingStrategy,
   driver: PostgreSqlDriver,
   seeder: {

@@ -1,8 +1,9 @@
+import { EntityManager } from "@mikro-orm/core";
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
+import { Category } from "src/entities/category.entity";
 import { Product } from "src/entities/product.entity";
 import { Review } from "src/entities/review.entity";
-import { AuthGuard } from "src/guards/auth.guard";
 import { apiError, apiResponse } from "src/helpers/response.helper";
 import { ProductService } from "src/services/database/product.service";
 import { ReviewService } from "src/services/database/review.service";
@@ -17,6 +18,7 @@ export class ProductController {
   constructor(
     private readonly productService: ProductService,
     private readonly reviewService: ReviewService,
+    private readonly entityManager: EntityManager
   ) { }
 
   // Sửa sản phẩm
@@ -106,4 +108,51 @@ export class ProductController {
     const imageIdList = imageIdListString.split(',').map(imageId => +imageId);
     await this.productService.deleteImages(imageIdList);
   }
+  // Thêm category cho sản phẩm
+  @Put(":productId/categories")
+  async syncCategories(
+    @Param("productId", ParseIntPipe) productId: number,
+    @Body() categories: number[]
+  ) {
+    const product = await this.productService.findByField({ productId });
+    if (null === product) {
+      throw apiError('Không tìm thấy sản phẩm');
+    }
+    await product.categories.load();
+    const categoryEntities: any[] = [];
+    for (const categoryId of categories) {
+      const categoryEntity = await this.entityManager.findOne(Category, { categoryId });
+      if (null === categoryEntity) continue;
+      categoryEntities.push(categoryEntity);
+    }
+    product.categories.set(categoryEntities);
+    await this.entityManager.persistAndFlush(product);
+  }
+  // Lấy Category của Product
+  @Get(":productId/categories")
+  async getCategories(
+    @Param("productId", ParseIntPipe) productId: number,
+  ) {
+    const product = await this.productService.findByField({ productId });
+    if (null === product) {
+      throw apiError('Không tìm thấy sản phẩm');
+    }
+    await product.categories.load();
+    return apiResponse('Danh mục của sản phẩm ' + product.productName, product.categories);
+  }
+  // Lấy thống kê
+  @Get(":productId/stats")
+  async getProductStats(
+    @Param("productId", ParseIntPipe) productId: number,
+  ) {
+    const stats = await this.productService.getStats(productId);
+    return apiResponse('Thống kê', stats);
+  }
 }
+
+/*
+  9704198526191432198
+  NGUYEN VAN A
+  07/15
+  123456
+*/

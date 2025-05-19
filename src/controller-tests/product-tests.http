@@ -34,3 +34,6 @@ DELETE http://localhost:3000/products/1
 Content-Type: application/json
 Authorization: Bearer ${{accessToken}}
 
+
+###
+GET http://localhost:3000/products/1/stats

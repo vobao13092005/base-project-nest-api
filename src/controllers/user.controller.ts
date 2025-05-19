@@ -6,7 +6,7 @@ import { apiError, apiResponse } from "src/helpers/response.helper";
 import { UserService } from "src/services/database/user.service";
 import { Store } from "src/entities/store.entity";
 import { Address } from "src/entities/address.entity";
-import { EntityManager } from "@mikro-orm/postgresql";
+import { EntityManager } from "@mikro-orm/core";
 import { OrderItem } from "src/entities/order-item.entity";
 import { OrderItemWithToppings } from "./order.controller";
 import { CartService } from "src/services/database/cart.service";
@@ -26,6 +26,7 @@ export class UserController {
   // Thêm người dùng
   @Post()
   async create(@Body() request: User) {
+    console.log(request)
     await this.userService.create(request);
     return apiResponse('Tạo tài khoản thành công');
   }
@@ -34,7 +35,10 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Put(':userId')
   async update(@Param('userId') userId: string, @Body() request: User) {
-    await this.userService.update(+userId, request);
+    const user = Object.fromEntries(
+      Object.entries(request).filter(([_, v]) => v !== null)
+    ) as User;
+    await this.userService.update(+userId, user);
     return apiResponse('Đã cập nhật người dùng');
   }
 

@@ -4,6 +4,8 @@ import { ProductImage } from "./product-image.entity";
 import { Review } from "./review.entity";
 import { Topping } from "./topping.entity";
 import { ProductTopping } from "./product-topping.entity";
+import { Category } from "./category.entity";
+import { ProductCategory } from "./product-category.entity";
 
 export enum ProductStatus {
   AVAILABLE = 'available',
@@ -39,6 +41,9 @@ export class Product {
 
   @ManyToMany({ entity: () => Topping, pivotEntity: () => ProductTopping })
   toppings = new Collection<Topping>(this);
+
+  @ManyToMany({ entity: () => Category, pivotEntity: () => ProductCategory })
+  categories = new Collection<Topping>(this);
 
   @Property()
   createdAt: Date = new Date;
