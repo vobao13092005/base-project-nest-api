@@ -104,7 +104,7 @@ export class UserController {
     @Param('userId', ParseIntPipe) userId: number
   ) {
     const userOrders = await this.entityManager.findAll(OrderItem, {
-      populate: ['toppingValues', 'toppingValues.topping', 'product'],
+      populate: ['toppingValues', 'toppingValues.topping', 'product', 'order', 'order.user', 'order.address'],
       where: {
         order: {
           user: {

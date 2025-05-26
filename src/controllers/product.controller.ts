@@ -155,4 +155,5 @@ export class ProductController {
   NGUYEN VAN A
   07/15
   123456
+  baovo/baovo test/test
 */
