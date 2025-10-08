@@ -8,12 +8,12 @@ import { SeedManager } from "@mikro-orm/seeder";
 const mikroConfig: MikroOrmModuleSyncOptions = {
   entities: ['./dist/**/*.entity.js'],
   entitiesTs: ['./src/**/*.entity.ts'],
-  dbName: 'BaseProject',
-  user: 'postgres',
-  password: 'postgres',
-  host: 'localhost',
-  schema: "public",
-  port: 5432,
+  dbName: process.env.DB_NAME!,
+  user: process.env.DB_USER!,
+  password: process.env.DB_PASS!,
+  host: process.env.DB_HOST!,
+  schema: process.env.DB_SCHEMA!,
+  port: parseInt(process.env.DB_PORT!),
   namingStrategy: EntityCaseNamingStrategy,
   driver: PostgreSqlDriver,
   seeder: {
